@@ -291,14 +291,23 @@ def DISPLAY_PIPELINE(video_sink='xvimagesink', sync='true', show_fps='false', na
         str: A string representing the GStreamer pipeline for displaying the video.
     """
     # Construct the display pipeline string
+    # display_pipeline = (
+    #     f'{QUEUE(name=f"{name}_hailooverlay_q")} ! '
+    #     f'hailooverlay name={name}_hailooverlay ! '
+    #     f'{QUEUE(name=f"{name}_videoconvert_q")} ! '
+    #     f'videoconvert name={name}_videoconvert n-threads=2 qos=false ! '
+    #     f'{QUEUE(name=f"{name}_q")} ! '
+    #     f'fpsdisplaysink name={name} video-sink={video_sink} sync={sync} text-overlay={show_fps} signal-fps-measurements=true '
+    # )
     display_pipeline = (
-        f'{QUEUE(name=f"{name}_hailooverlay_q")} ! '
-        f'hailooverlay name={name}_hailooverlay ! '
-        f'{QUEUE(name=f"{name}_videoconvert_q")} ! '
-        f'videoconvert name={name}_videoconvert n-threads=2 qos=false ! '
-        f'{QUEUE(name=f"{name}_q")} ! '
-        f'fpsdisplaysink name={name} video-sink={video_sink} sync={sync} text-overlay={show_fps} signal-fps-measurements=true '
-    )
+    f'{QUEUE(name=f"{name}_hailooverlay_q")} ! '
+    f'hailooverlay name={name}_hailooverlay ! '
+    f'{QUEUE(name=f"{name}_videoconvert_q")} ! '
+    f'videoconvert name={name}_videoconvert n-threads=2 qos=false ! '
+    f'{QUEUE(name=f"{name}_q")} ! '
+    # If video_sink is provided, use fpsdisplaysink, else default to fakesink
+    f'{f"fpsdisplaysink name={name} video-sink={video_sink} sync={sync} text-overlay={show_fps} signal-fps-measurements=true" if video_sink else f"fakesink name={name}_fakesink sync={sync}"} '
+)
 
     return display_pipeline
 
