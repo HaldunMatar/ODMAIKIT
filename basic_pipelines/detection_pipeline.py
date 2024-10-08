@@ -99,7 +99,7 @@ class GStreamerDetectionApp(GStreamerApp):
             f'{user_callback_pipeline} ! '
             f'{display_pipeline}'
         )
-        print(pipeline_string)
+        print('pipeline_string' , pipeline_string)
         return pipeline_string
 
 if __name__ == "__main__":
